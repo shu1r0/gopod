@@ -35,7 +35,7 @@ func (svr *Server) Start() {
 
 			switch svr.Transp {
 			case TCP:
-				listen, err := net.Listen("tcp", ":"+port)
+				listen, err := net.Listen("tcp", svr.IPAddr+":"+port)
 				if err != nil {
 					fmt.Println(err)
 					return
@@ -49,8 +49,9 @@ func (svr *Server) Start() {
 					go handleConnection(conn)
 				}
 			case UDP:
-				pc, err := net.ListenPacket(string(svr.Transp), svr.IPAddr)
+				pc, err := net.ListenPacket(string(svr.Transp), svr.IPAddr+":"+port)
 				if err != nil {
+					fmt.Println(err)
 					return
 				}
 				buffer := make([]byte, 1024)
